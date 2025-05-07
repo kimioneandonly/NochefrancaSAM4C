@@ -6,6 +6,7 @@ import Skills from './components/Skills';
 import Qualifications from './components/Qualifications';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import ITEducationalTourBlog from './components/Blog.jsx'; // Corrected import: "Blog.jsx"
 import './index.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <Hero />
       <About />
       <Skills />
+      <ITEducationalTourBlog />
       <Qualifications />
       <Contact />
       <Footer />

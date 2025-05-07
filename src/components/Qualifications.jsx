@@ -13,6 +13,7 @@ export default function Qualifications() {
   const [activeTab, setActiveTab] = useState('education');
   const [selectedProject, setSelectedProject] = useState(null);
   const [expandedImage, setExpandedImage] = useState(null);
+  const [selectedCertification, setSelectedCertification] = useState(null); // New state for certification modal
 
   const handleImageClick = (e, image) => {
     e.stopPropagation();
@@ -71,16 +72,39 @@ export default function Qualifications() {
     {
       id: 1,
       title: "Generative AI for Beginners",
-      institution: "LinkedIn",
+      institution: "Simplilearn",
       year: "2025",
-      description: "An introductory course on the fundamentals and applications of generative AI"
+      description: "An introductory course on the fundamentals and applications of generative AI",
+      image: "/images/Generative AI for Beginners_page-0001.jpg"
     },
     {
       id: 2,
       title: "Copilot for Startups",
-      institution: "LinkedIn",
+      institution: "Microsoft + Simplilearn",
       year: "2025",
-      description: "A course on leveraging Microsoft Copilot tools to boost productivity and growth in startups."
+      description: "A course on leveraging Microsoft Copilot tools to boost productivity and growth in startups.",
+      image: "/images/Introduction to Copilot for Startups_page-0001.jpg"
+    },
+    {
+      id: 3,
+      title: "Gemini for Google Workspace",
+      institution: "Google",
+      year: "2025",
+      image: "/images/Gemini for Google Workspace_page-0001.jpg"
+    },
+    {
+      id: 4,
+      title: "ChatGPT Advanced Course",
+      institution: "Simplilearn",
+      year: "2025",
+      image: "/images/ChatGPT Advanced Course_page-0001.jpg"
+    },
+    {
+      id: 5,
+      title: "Frontend Development Libraries",
+      institution: "freeCodeCamp",
+      year: "2025",
+      image: "/images/CERT.png"
     }
   ];
 
@@ -505,45 +529,55 @@ export default function Qualifications() {
         gridTemplateColumns: '1fr',
         gap: '1.5rem'
       }}>
-        {getActiveData().map((item, index) => (
-          <motion.div
-            key={item.id}
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.5 + index * 0.1, duration: 0.6 }}
-            style={{
-              backgroundColor: 'rgb(0, 0, 0)',
-              backdropFilter: 'blur(10px)',
-              borderRadius: '12px',
-              padding: '2rem',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
-              position: 'relative',
-              overflow: 'hidden',
-              transition: 'all 0.3s ease'
-            }}
-            whileHover={{
-              transform: activeTab !== 'projects' ? 'translateY(-5px)' : 'none',
-              boxShadow: activeTab !== 'projects' ? '0 15px 40px rgba(3, 105, 207, 0.3)' : '0 10px 30px rgba(0, 0, 0, 0.2)' // Changed hover shadow
-            }}
-            onClick={activeTab === 'projects' ? () => setSelectedProject(item) : undefined}
-          >
-            {/* Timeline indicator for non-project items */}
-            {activeTab !== 'projects' && (
-              <div style={{
-                position: 'absolute',
-                left: '2rem',
-                top: '2.5rem',
-                bottom: '2.5rem',
-                width: '4px',
-                backgroundColor: '#0369CF', // Changed color
-                borderRadius: '2px'
-              }} />
-            )}
+        {getActiveData().map((item, index) => {
+          const isCertification = activeTab === 'certifications';
+          return (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.5 + index * 0.1, duration: 0.6 }}
+              style={{
+                backgroundColor: 'rgb(0, 0, 0)',
+                backdropFilter: 'blur(10px)',
+                borderRadius: '12px',
+                padding: '2rem',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
+                position: 'relative',
+                overflow: 'hidden',
+                transition: 'all 0.3s ease',
+                cursor: isCertification ? 'pointer' : 'default', // Add pointer cursor for certifications
+              }}
+              whileHover={{
+                transform: activeTab !== 'projects' ? 'translateY(-5px)' : 'none',
+                boxShadow: activeTab !== 'projects' ? '0 15px 40px rgba(3, 105, 207, 0.3)' : '0 10px 30px rgba(0, 0, 0, 0.2)' // Changed hover shadow
+              }}
+              onClick={() => {
+                if (isCertification && item.image) {
+                  setSelectedCertification(item); // Open modal for certifications
+                } else if (activeTab === 'projects') {
+                  setSelectedProject(item);
+                }
+              }}
+            >
+              {/* Timeline indicator for non-project items */}
+              {activeTab !== 'projects' && (
+                <div style={{
+                  position: 'absolute',
+                  left: '2rem',
+                  top: '2.5rem',
+                  bottom: '2.5rem',
+                  width: '4px',
+                  backgroundColor: '#0369CF', // Changed color
+                  borderRadius: '2px'
+                }} />
+              )}
 
-            {renderContent(item)}
-          </motion.div>
-        ))}
+              {renderContent(item)}
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Expanded Image Modal */}
@@ -681,7 +715,7 @@ export default function Qualifications() {
                 alt={selectedProject.title}
                 style={{
                   width: '100%',
-                  height:'100%',
+                  height: '100%',
                   objectFit: 'cover',
                   transition: 'transform 0.3s ease',
                 }}
@@ -784,7 +818,63 @@ export default function Qualifications() {
           </motion.div>
         </motion.div>
       )}
+
+      {/* Certification Image Modal */}
+      {selectedCertification && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setSelectedCertification(null)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.95)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            cursor: 'zoom-out',
+            padding: '2rem',
+          }}
+        >
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedCertification(null);
+            }}
+            style={{
+              position: 'absolute',
+              top: '2rem',
+              right: '2rem',
+              background: 'transparent',
+              border: 'none',
+              color: 'white',
+              fontSize: '1.5rem',
+              cursor: 'pointer',
+              zIndex: 1001,
+            }}
+          >
+            <FiX />
+          </button>
+          <motion.img
+            src={selectedCertification.image}
+            alt={selectedCertification.title}
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.2 }}
+            style={{
+              maxHeight: '90vh',
+              maxWidth: '90vw',
+              objectFit: 'contain',
+              borderRadius: '8px',
+            }}
+          />
+        </motion.div>
+      )}
     </motion.section>
   );
 }
-

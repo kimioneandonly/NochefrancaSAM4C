@@ -11,12 +11,16 @@ export default function Header() {
     { id: 'hero', label: 'Home' },
     { id: 'about', label: 'About' },
     { id: 'skills', label: 'Skills' },
-    { id: 'projects', label: 'Projects' },
+    { id: 'qualifications', label: 'Qualifications' },
+    { id: 'blog', label: 'Blog' }, // Added Blog
     { id: 'contact', label: 'Contact' }
   ];
 
   const handleViewBlog = () => {
-    window.open('https://portfolio-nochefrancakim.netlify.app');
+    const blogElement = document.getElementById('blog');
+    if (blogElement) {
+      blogElement.scrollIntoView({ behavior: 'smooth' });
+    }
     if (isMobile) setIsMenuOpen(false);
   };
 
@@ -116,7 +120,7 @@ export default function Header() {
           }}
           whileHover={{
             scale: 1.05,
-            color: '#0369CF' // Changed hover color here
+            color: '#0369CF'
           }}
         >
           KimioneAndOnly
@@ -144,7 +148,7 @@ export default function Header() {
                   transition: 'all 0.3s ease'
                 }}
                 whileHover={{
-                  color: '#0369CF',  // Changed hover color here
+                  color: '#0369CF',
                   y: -2
                 }}
               >
@@ -222,7 +226,7 @@ export default function Header() {
                 transition: 'all 0.3s ease'
               }}
               whileHover={{
-                color: '#0369CF', // Changed hover color here
+                color: '#0369CF',
                 x: 10
               }}
             >
